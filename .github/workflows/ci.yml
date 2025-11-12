@@ -1,0 +1,147 @@
+name: CI - Pruebas y Calidad de Código
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  test-and-lint:
+    name: Pruebas Unitarias y Linting
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🔍 Ejecutar ESLint
+        run: npm run lint
+        continue-on-error: false
+
+      - name: 🧪 Ejecutar pruebas unitarias
+        run: npm run test
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
+
+      - name: 📊 Generar reporte de cobertura
+        run: npm run test:coverage
+        continue-on-error: true
+
+      - name: 📤 Subir reporte de cobertura
+        uses: codecov/codecov-action@v3
+        if: matrix.node-version == '20.x'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
+
+      - name: 🏗️ Verificar build
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
+
+  type-check:
+    name: Verificación de Tipos (TypeScript)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🔷 Verificar tipos TypeScript
+        run: npx tsc --noEmit
+
+  security-check:
+    name: Verificación de Seguridad
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: 📦 Instalar dependencias
+        run: npm ci
+
+      - name: 🔒 Auditoría de seguridad
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+  code-quality:
+    name: Análisis de Calidad de Código
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout del código
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🔍 SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        continue-on-error: true
+
+  status-check:
+    name: ✅ Estado Final del Pipeline
+    runs-on: ubuntu-latest
+    needs: [test-and-lint, type-check, security-check]
+    if: always()
+
+    steps:
+      - name: 📊 Verificar resultados
+        run: |
+          echo "Test y Lint: ${{ needs.test-and-lint.result }}"
+          echo "Type Check: ${{ needs.type-check.result }}"
+          echo "Security Check: ${{ needs.security-check.result }}"
+          
+          if [ "${{ needs.test-and-lint.result }}" != "success" ]; then
+            echo "❌ Las pruebas unitarias o el linting fallaron"
+            exit 1
+          fi
+          
+          if [ "${{ needs.type-check.result }}" != "success" ]; then
+            echo "❌ La verificación de tipos falló"
+            exit 1
+          fi
+          
+          echo "✅ Todos los checks pasaron correctamente"
+

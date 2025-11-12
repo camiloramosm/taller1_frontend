@@ -122,6 +122,7 @@ export const CheckoutForm: React.FC = () => {
 
     // Validar formulario completo
     const result = validarConSchema(schemaPedido, formData);
+    
     if (!result.success) {
       setErrors(result.errors);
       showErrorToast('Por favor, corrige los errores en el formulario');

@@ -27,12 +27,12 @@ export function App() {
 
         <Cart />
 
-        <footer className="bg-black text-white py-8 text-center">
-          <p className="text-gray-400">
-            © 2024 El Campo de Don Ramón. Compartiendo la vida del campo con
-            autenticidad.
-          </p>
-        </footer>
+      <footer className="bg-black text-white py-8 text-center">
+        <p className="text-gray-400">
+          © 2024 El Campo de Don Ramón. Compartiendo la vida del campo con
+          autenticidad.
+        </p>
+      </footer>
 
         {/* Toast Notifications */}
         <Toaster position="top-center" />

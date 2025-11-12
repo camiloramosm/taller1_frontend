@@ -13,8 +13,8 @@ export function Header() {
           <div className="flex items-center">
             <Link to="/">
               <h1 className="text-2xl font-bold text-[#FFD700] hover:text-[#FDB913] transition-colors cursor-pointer">
-                EL CAMPO DE DON RAMÓN
-              </h1>
+              EL CAMPO DE DON RAMÓN
+            </h1>
             </Link>
           </div>
 

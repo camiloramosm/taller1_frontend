@@ -214,10 +214,17 @@ export const validarConSchema = <T>(
   }
   
   const errors: Record<string, string> = {};
-  result.error.errors.forEach((error) => {
-    const path = error.path.join('.');
-    errors[path] = error.message;
-  });
+  
+  // Verificar que result.error y result.error.errors existan
+  if (result.error && result.error.errors && Array.isArray(result.error.errors)) {
+    result.error.errors.forEach((error) => {
+      const path = error.path.join('.');
+      errors[path || 'general'] = error.message;
+    });
+  } else {
+    // Error genérico si no hay detalles
+    errors['general'] = 'Error de validación';
+  }
   
   return { success: false, errors };
 };

@@ -8,7 +8,7 @@ export function Cart() {
   const navigate = useNavigate();
   const {
     items,
-    isOpen,
+  isOpen,
     closeCart,
     removeItem,
     updateQuantity,
@@ -31,7 +31,7 @@ export function Cart() {
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-[#F5E6D3] shadow-2xl z-50 flex flex-col">
         <div className="bg-black text-white p-6 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold">Carrito</h2>
+          <h2 className="text-2xl font-bold">Carrito</h2>
             {items.length > 0 && (
               <p className="text-sm text-gray-300">{getTotalItems()} {getTotalItems() === 1 ? 'producto' : 'productos'}</p>
             )}
@@ -53,10 +53,10 @@ export function Cart() {
             </div> : <div className="space-y-4">
               {items.map(item => <div key={item.id} className="bg-white rounded-lg p-4 shadow-md">
                   <div className="flex gap-4">
-                    <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
+                  <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded" />
 
-                    <div className="flex-1">
-                      <h3 className="font-bold text-black">{item.name}</h3>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-black">{item.name}</h3>
                       <p className="text-sm text-gray-600 mb-2">{formatearMoneda(item.price)} c/u</p>
                       
                       {/* Control de cantidad */}
@@ -80,16 +80,16 @@ export function Cart() {
 
                       <p className="font-bold text-black mt-2">
                         {formatearMoneda(item.price * item.quantity)}
-                      </p>
-                    </div>
+                    </p>
+                  </div>
 
                     <button
                       onClick={() => removeItem(item.id)}
                       className="text-red-600 hover:text-red-800 p-2 self-start"
                       aria-label="Eliminar producto"
                     >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                   </div>
                 </div>)}
             </div>}
