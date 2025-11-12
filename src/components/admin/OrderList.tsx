@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useOrders } from '../../hooks/useOrders';
 import { formatearMoneda, formatearFecha, formatearTelefono } from '../../utils/validations';
 import { Package, Search, Filter } from 'lucide-react';
-import type { Pedido, EstadoPedido } from '../../types/database';
+import type { EstadoPedido } from '../../types/database';
 
 /**
  * Componente para listar y administrar pedidos (Admin)
@@ -14,20 +14,16 @@ export const OrderList: React.FC = () => {
   const [filterEstado, setFilterEstado] = useState<EstadoPedido | ''>('');
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadOrders();
-  }, []);
-
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     await getOrders({
       ...(filterEstado && { estado: filterEstado }),
       limit: 100,
     });
-  };
+  }, [filterEstado, getOrders]);
 
   useEffect(() => {
     loadOrders();
-  }, [filterEstado]);
+  }, [loadOrders]);
 
   const handleUpdateStatus = async (orderId: string, newStatus: EstadoPedido) => {
     const response = await updateOrderStatus(orderId, newStatus);

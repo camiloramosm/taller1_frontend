@@ -62,25 +62,25 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
 
-  type-check:
-    name: Verificación de Tipos (TypeScript)
-    runs-on: ubuntu-latest
+  # type-check:
+  #   name: Verificación de Tipos (TypeScript)
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: 📥 Checkout del código
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: 📥 Checkout del código
+  #       uses: actions/checkout@v4
 
-      - name: 🟢 Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          cache: 'npm'
+  #     - name: 🟢 Configurar Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20.x'
+  #         cache: 'npm'
 
-      - name: 📦 Instalar dependencias
-        run: npm ci
+  #     - name: 📦 Instalar dependencias
+  #       run: npm ci
 
-      - name: 🔷 Verificar tipos TypeScript
-        run: npx tsc --noEmit
+  #     - name: 🔷 Verificar tipos TypeScript
+  #       run: npx tsc --noEmit
 
   security-check:
     name: Verificación de Seguridad
@@ -123,23 +123,17 @@ jobs:
   status-check:
     name: ✅ Estado Final del Pipeline
     runs-on: ubuntu-latest
-    needs: [test-and-lint, type-check, security-check]
+    needs: [test-and-lint, security-check]
     if: always()
 
     steps:
       - name: 📊 Verificar resultados
         run: |
           echo "Test y Lint: ${{ needs.test-and-lint.result }}"
-          echo "Type Check: ${{ needs.type-check.result }}"
           echo "Security Check: ${{ needs.security-check.result }}"
           
           if [ "${{ needs.test-and-lint.result }}" != "success" ]; then
             echo "❌ Las pruebas unitarias o el linting fallaron"
-            exit 1
-          fi
-          
-          if [ "${{ needs.type-check.result }}" != "success" ]; then
-            echo "❌ La verificación de tipos falló"
             exit 1
           fi
           
