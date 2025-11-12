@@ -215,11 +215,11 @@ export const validarConSchema = <T>(
   
   const errors: Record<string, string> = {};
   
-  // Verificar que result.error y result.error.errors existan
-  if (result.error && result.error.errors && Array.isArray(result.error.errors)) {
-    result.error.errors.forEach((error) => {
-      const path = error.path.join('.');
-      errors[path || 'general'] = error.message;
+  // Obtener errores de Zod
+  if (result.error && result.error.issues) {
+    result.error.issues.forEach((issue) => {
+      const path = issue.path.join('.');
+      errors[path || 'general'] = issue.message;
     });
   } else {
     // Error genérico si no hay detalles
