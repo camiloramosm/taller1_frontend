@@ -7,6 +7,7 @@ describe('RateLimiter', () => {
   beforeEach(() => {
     // Limpiar localStorage antes de cada test
     localStorage.clear();
+    vi.clearAllMocks();
     
     rateLimiter = new RateLimiter({
       maxAttempts: 3,
@@ -22,19 +23,20 @@ describe('RateLimiter', () => {
   });
 
   it('debe rastrear los intentos correctamente', () => {
-    // Primera intento
-    expect(rateLimiter.canAttempt().allowed).toBe(true);
+    // Primer intento
     rateLimiter.recordAttempt();
+    expect(rateLimiter.canAttempt().allowed).toBe(true);
+    expect(rateLimiter.canAttempt().remainingAttempts).toBe(2);
 
     // Segundo intento
-    expect(rateLimiter.canAttempt().allowed).toBe(true);
     rateLimiter.recordAttempt();
+    expect(rateLimiter.canAttempt().allowed).toBe(true);
+    expect(rateLimiter.canAttempt().remainingAttempts).toBe(1);
 
     // Tercer intento
-    expect(rateLimiter.canAttempt().allowed).toBe(true);
     rateLimiter.recordAttempt();
-
-    // Cuarto intento - debe ser bloqueado
+    
+    // Cuarto intento - debe ser bloqueado (ya se alcanzó el máximo)
     const result = rateLimiter.canAttempt();
     expect(result.allowed).toBe(false);
     expect(result.retryAfter).toBeGreaterThan(0);
