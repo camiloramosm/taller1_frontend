@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import type { MensajeContacto, NuevoMensajeContacto } from '../types/database';
+import type { MensajeContacto, NuevoMensajeContacto, Database } from '../types/database';
 import type { ApiResponse } from '../types';
 
 interface UseContactMessagesReturn {
@@ -39,7 +39,7 @@ export const useContactMessages = (): UseContactMessagesReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('mensajes_contacto')
-          .insert(message)
+          .insert(message as any)
           .select()
           .single();
 
@@ -137,6 +137,7 @@ export const useContactMessages = (): UseContactMessagesReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('mensajes_contacto')
+          // @ts-expect-error - Supabase type inference issue
           .update({ leido: true })
           .eq('id', id)
           .select()

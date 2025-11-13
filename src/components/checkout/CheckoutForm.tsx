@@ -98,8 +98,11 @@ export const CheckoutForm: React.FC = () => {
 
     // Validar campo individual
     const result = validarConSchema(schemaPedido, formData);
-    if (!result.success && result.errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: result.errors[name] }));
+    if (!result.success) {
+      const errors = (result as { success: false; errors: Record<string, string> }).errors;
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: errors[name] }));
+      }
     }
   };
 
@@ -124,7 +127,7 @@ export const CheckoutForm: React.FC = () => {
     const result = validarConSchema(schemaPedido, formData);
     
     if (!result.success) {
-      setErrors(result.errors);
+      setErrors((result as { success: false; errors: Record<string, string> }).errors);
       showErrorToast('Por favor, corrige los errores en el formulario');
       return;
     }

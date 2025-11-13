@@ -104,8 +104,9 @@ describe('Schemas de Validación', () => {
       const result = validarConSchema(schemaPedido, pedido);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.errors).toHaveProperty('correo_electronico');
-        expect(result.errors).toHaveProperty('telefono');
+        const errors = (result as { success: false; errors: Record<string, string> }).errors;
+        expect(errors).toHaveProperty('correo_electronico');
+        expect(errors).toHaveProperty('telefono');
       }
     });
   });
@@ -134,8 +135,9 @@ describe('Schemas de Validación', () => {
       const result = validarConSchema(schemaContacto, mensaje);
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.errors).toHaveProperty('nombre_completo');
-        expect(result.errors).toHaveProperty('correo_electronico');
+        const errors = (result as { success: false; errors: Record<string, string> }).errors;
+        expect(errors).toHaveProperty('nombre_completo');
+        expect(errors).toHaveProperty('correo_electronico');
       }
     });
   });

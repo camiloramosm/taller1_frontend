@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
-import type { Pedido, NuevoPedido, EstadoPedido } from '../types/database';
+import type { Pedido, NuevoPedido, EstadoPedido, Database } from '../types/database';
 import type { ApiResponse } from '../types';
 
 interface UseOrdersReturn {
@@ -40,7 +40,7 @@ export const useOrders = (): UseOrdersReturn => {
     try {
       const { data, error: supabaseError } = await supabase
         .from('pedidos')
-        .insert(order)
+        .insert(order as any)
         .select()
         .single();
 
@@ -175,6 +175,7 @@ export const useOrders = (): UseOrdersReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('pedidos')
+          // @ts-expect-error - Supabase type inference issue
           .update({ estado })
           .eq('id', id)
           .select()
