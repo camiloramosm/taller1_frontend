@@ -7,6 +7,7 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)
 ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8)
 ![Vitest](https://img.shields.io/badge/Vitest-Testing-yellow)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-green)
 
 ## ✨ Características Principales
 
@@ -109,6 +110,46 @@ La aplicación estará disponible en `http://localhost:5173`
 4. Pégalas en el archivo `.env.local`
 
 Para más detalles, consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
+
+## 🚀 CI/CD y Calidad de Código
+
+El proyecto cuenta con un pipeline de CI/CD completo que garantiza la calidad del código:
+
+### Pipeline Automático
+- ✅ **ESLint**: Verificación de estándares de código (máx. 10 warnings)
+- ✅ **TypeScript**: Verificación de tipos (0 errores)
+- ✅ **Tests Unitarios**: 34 tests automatizados
+- ✅ **Build**: Verificación de compilación
+- ✅ **Cobertura**: Mínimo 70% en líneas, funciones y branches
+
+### Protección de Ramas
+- 🔒 Pull Requests requeridos para merge a `main`
+- 🔒 CI debe pasar antes de permitir el merge
+- 🔒 Revisión de código recomendada
+
+### Comandos de Validación
+
+```bash
+# Ejecutar todas las validaciones localmente
+npm run validate
+
+# Solo linting
+npm run lint
+
+# Solo verificación de tipos
+npm run type-check
+
+# Solo tests
+npm test
+
+# Ver cobertura
+npm run test:coverage
+```
+
+### Documentación del CI/CD
+- 📖 [Guía del Pipeline](.github/workflows/PIPELINE_README.md)
+- 📖 [Protección de Ramas](.github/BRANCH_PROTECTION_GUIDE.md)
+- 📖 [Documentación Completa](.github/README.md)
 
 ## 📁 Estructura del Proyecto
 
