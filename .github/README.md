@@ -19,6 +19,14 @@ Guía paso a paso para configurar las protecciones de rama en GitHub:
 - Flujo de trabajo completo con PRs
 - Solución de problemas comunes
 
+### 🚀 [Guía de Deployment en Vercel](VERCEL_DEPLOYMENT_GUIDE.md)
+Guía completa para configurar deployment automático a Vercel:
+- Configurar proyecto en Vercel
+- Obtener y configurar tokens necesarios
+- Deployment automático después de merge a `main`
+- Variables de entorno y dominios personalizados
+- Troubleshooting y mejores prácticas
+
 ### 📋 [Template de Pull Request](PULL_REQUEST_TEMPLATE.md)
 Template automático para crear Pull Requests consistentes.
 
@@ -63,9 +71,9 @@ graph LR
     H -->|Sí| J[Merge]
 ```
 
-## ✅ Validaciones Automáticas
+## ✅ Validaciones y Deployment Automáticos
 
-Cada PR ejecuta automáticamente:
+### En Pull Requests (CI)
 
 | Check | Descripción | Bloquea Merge |
 |-------|-------------|---------------|
@@ -75,6 +83,14 @@ Cada PR ejecuta automáticamente:
 | 🏗️ Build | Verifica compilación | ✅ Sí |
 | 🔒 Security | Auditoría de seguridad | ⚠️ No |
 | 📊 Coverage | Reporte de cobertura | ⚠️ No |
+
+### Después de Merge a `main` (CD)
+
+| Paso | Descripción | Tiempo |
+|------|-------------|--------|
+| 🏗️ Build | Compilación del proyecto | ~1-2 min |
+| 🚀 Deploy | Deployment a Vercel | ~30-60 seg |
+| ✅ Live | App en producción | Total: ~2-3 min |
 
 ## 🎯 Estándares del Proyecto
 
@@ -125,18 +141,52 @@ Cada PR ejecuta automáticamente:
 - **Si tarda más**: Puede ser carga del servidor de GitHub
 - **Solución**: Espera o cancela y vuelve a ejecutar
 
+## 🚀 Deployment
+
+El proyecto se despliega automáticamente a Vercel después de cada merge a `main`.
+
+### Configuración Inicial
+
+Para configurar el deployment automático, sigue estos pasos:
+
+1. **Crea un proyecto en Vercel** (si no existe)
+2. **Obtén los tokens necesarios**:
+   - Vercel Token
+   - Organization ID
+   - Project ID
+3. **Configura los secrets en GitHub**:
+   - `VERCEL_TOKEN`
+   - `VERCEL_ORG_ID`
+   - `VERCEL_PROJECT_ID`
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+
+📖 **Guía completa**: [VERCEL_DEPLOYMENT_GUIDE.md](VERCEL_DEPLOYMENT_GUIDE.md)
+
+### Flujo de Deployment
+
+```mermaid
+graph LR
+    A[Merge a main] --> B[GitHub Actions]
+    B --> C[Build]
+    C --> D[Deploy a Vercel]
+    D --> E[✅ En Producción]
+```
+
 ## 📈 Mejoras Futuras
 
 - [ ] Tests E2E con Playwright
 - [ ] Análisis de bundle size
 - [ ] Lighthouse CI para performance
-- [ ] Deploy automático a preview environments
+- [x] Deploy automático a producción
+- [ ] Preview deployments para PRs
 - [ ] Notificaciones en Slack
 
 ## 📞 Soporte
 
 - **Documentación del Pipeline**: [PIPELINE_README.md](workflows/PIPELINE_README.md)
 - **Guía de Protección**: [BRANCH_PROTECTION_GUIDE.md](BRANCH_PROTECTION_GUIDE.md)
+- **Guía de Deployment**: [VERCEL_DEPLOYMENT_GUIDE.md](VERCEL_DEPLOYMENT_GUIDE.md)
 - **Issues**: [GitHub Issues](https://github.com/camiloramosm/taller1_frontend/issues)
 
 ---
