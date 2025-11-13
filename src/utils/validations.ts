@@ -215,14 +215,18 @@ export const validarConSchema = <T>(
   
   const errors: Record<string, string> = {};
   
-  // Verificar que result.error y result.error.errors existan
-  if (result.error && result.error.errors && Array.isArray(result.error.errors)) {
-    result.error.errors.forEach((error) => {
-      const path = error.path.join('.');
-      errors[path || 'general'] = error.message;
+  // Procesar errores de Zod (usa 'issues' no 'errors')
+  if (result.error && result.error.issues) {
+    result.error.issues.forEach((issue) => {
+      const path = issue.path.join('.');
+      if (path) {
+        errors[path] = issue.message;
+      } else {
+        errors['general'] = issue.message;
+      }
     });
   } else {
-    // Error genérico si no hay detalles
+    // Error genérico si no hay errores detallados
     errors['general'] = 'Error de validación';
   }
   
