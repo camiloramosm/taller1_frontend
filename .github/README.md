@@ -19,13 +19,12 @@ Guía paso a paso para configurar las protecciones de rama en GitHub:
 - Flujo de trabajo completo con PRs
 - Solución de problemas comunes
 
-### 🚀 [Guía de Deployment en Vercel](VERCEL_DEPLOYMENT_GUIDE.md)
-Guía completa para configurar deployment automático a Vercel:
-- Configurar proyecto en Vercel
-- Obtener y configurar tokens necesarios
-- Deployment automático después de merge a `main`
-- Variables de entorno y dominios personalizados
-- Troubleshooting y mejores prácticas
+### 🚀 Deployment en Vercel
+El proyecto se despliega automáticamente a Vercel mediante la integración directa con GitHub:
+- Cada push a `main` genera un deployment a producción
+- Cada PR genera un preview deployment
+- Variables de entorno configuradas en Vercel Dashboard
+- No requiere configuración adicional de GitHub Actions
 
 ### 📋 [Template de Pull Request](PULL_REQUEST_TEMPLATE.md)
 Template automático para crear Pull Requests consistentes.
@@ -86,11 +85,10 @@ graph LR
 
 ### Después de Merge a `main` (CD)
 
-| Paso | Descripción | Tiempo |
-|------|-------------|--------|
-| 🏗️ Build | Compilación del proyecto | ~1-2 min |
-| 🚀 Deploy | Deployment a Vercel | ~30-60 seg |
-| ✅ Live | App en producción | Total: ~2-3 min |
+El deployment es automático gracias a la integración de Vercel con GitHub:
+- 🏗️ Vercel detecta el push a `main`
+- 🚀 Build y deployment automático
+- ✅ App en producción en ~2-3 minutos
 
 ## 🎯 Estándares del Proyecto
 
@@ -141,37 +139,29 @@ graph LR
 - **Si tarda más**: Puede ser carga del servidor de GitHub
 - **Solución**: Espera o cancela y vuelve a ejecutar
 
-## 🚀 Deployment
+## 🚀 Deployment Automático
 
-El proyecto se despliega automáticamente a Vercel después de cada merge a `main`.
+El proyecto está conectado con Vercel y se despliega automáticamente:
 
-### Configuración Inicial
+### Cómo Funciona
 
-Para configurar el deployment automático, sigue estos pasos:
+- **Push a `main`** → Deployment a producción automático
+- **Pull Request** → Preview deployment automático
+- **Tiempo**: ~2-3 minutos
 
-1. **Crea un proyecto en Vercel** (si no existe)
-2. **Obtén los tokens necesarios**:
-   - Vercel Token
-   - Organization ID
-   - Project ID
-3. **Configura los secrets en GitHub**:
-   - `VERCEL_TOKEN`
-   - `VERCEL_ORG_ID`
-   - `VERCEL_PROJECT_ID`
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
+### Variables de Entorno en Vercel
 
-📖 **Guía completa**: [VERCEL_DEPLOYMENT_GUIDE.md](VERCEL_DEPLOYMENT_GUIDE.md)
+Configura en Vercel Dashboard → Settings → Environment Variables:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
 
 ### Flujo de Deployment
 
-```mermaid
-graph LR
-    A[Merge a main] --> B[GitHub Actions]
-    B --> C[Build]
-    C --> D[Deploy a Vercel]
-    D --> E[✅ En Producción]
 ```
+Merge a main → Vercel detecta cambio → Build → Deploy → ✅ Producción
+```
+
+No requiere configuración adicional en GitHub Actions.
 
 ## 📈 Mejoras Futuras
 
@@ -186,7 +176,6 @@ graph LR
 
 - **Documentación del Pipeline**: [PIPELINE_README.md](workflows/PIPELINE_README.md)
 - **Guía de Protección**: [BRANCH_PROTECTION_GUIDE.md](BRANCH_PROTECTION_GUIDE.md)
-- **Guía de Deployment**: [VERCEL_DEPLOYMENT_GUIDE.md](VERCEL_DEPLOYMENT_GUIDE.md)
 - **Issues**: [GitHub Issues](https://github.com/camiloramosm/taller1_frontend/issues)
 
 ---
