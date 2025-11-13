@@ -32,15 +32,12 @@ jobs:
       - name: 📦 Instalar dependencias
         run: npm ci
 
-      - name: 🔍 Ejecutar ESLint
-        run: npm run lint
-        continue-on-error: false
-
-      - name: 🧪 Ejecutar pruebas unitarias
-        run: npm run test
+      - name: 🔍 Ejecutar validación completa (ESLint + TypeScript + Tests)
+        run: npm run validate
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
+        continue-on-error: false
 
       - name: 📊 Generar reporte de cobertura
         run: npm run test:coverage
@@ -129,19 +126,32 @@ jobs:
     steps:
       - name: 📊 Verificar resultados
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 RESUMEN DE VALIDACIONES"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Test y Lint: ${{ needs.test-and-lint.result }}"
           echo "Type Check: ${{ needs.type-check.result }}"
           echo "Security Check: ${{ needs.security-check.result }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           
           if [ "${{ needs.test-and-lint.result }}" != "success" ]; then
-            echo "❌ Las pruebas unitarias o el linting fallaron"
+            echo "❌ FALLO: Las pruebas unitarias o el linting fallaron"
+            echo "ℹ️  Revisa los logs de 'Test y Lint' para más detalles"
             exit 1
           fi
           
           if [ "${{ needs.type-check.result }}" != "success" ]; then
-            echo "❌ La verificación de tipos falló"
+            echo "❌ FALLO: La verificación de tipos TypeScript falló"
+            echo "ℹ️  Revisa los logs de 'Type Check' para más detalles"
             exit 1
           fi
           
-          echo "✅ Todos los checks pasaron correctamente"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ ÉXITO: Todas las validaciones pasaron"
+          echo "✓ ESLint: Sin errores ni warnings"
+          echo "✓ TypeScript: Sin errores de tipos"
+          echo "✓ Tests: Todos pasando"
+          echo "✓ Build: Compilación exitosa"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎉 El PR está listo para merge"
 
