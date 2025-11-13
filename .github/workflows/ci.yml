@@ -26,7 +26,7 @@ jobs:
       - name: 📦 Instalar pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: 🟢 Configurar Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -75,7 +75,7 @@ jobs:
       - name: 📦 Instalar pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: 🟢 Configurar Node.js
         uses: actions/setup-node@v4
@@ -100,7 +100,7 @@ jobs:
       - name: 📦 Instalar pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 10
 
       - name: 🟢 Configurar Node.js
         uses: actions/setup-node@v4
