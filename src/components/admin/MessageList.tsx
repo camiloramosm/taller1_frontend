@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useContactMessages } from '../../hooks/useContactMessages';
 import { formatearFecha, formatearTelefono } from '../../utils/validations';
 import { Mail, MailOpen, Search, Filter } from 'lucide-react';
-import type { MensajeContacto } from '../../types/database';
 
 /**
  * Componente para listar y administrar mensajes de contacto (Admin)
@@ -14,11 +13,7 @@ export const MessageList: React.FC = () => {
   const [filterLeido, setFilterLeido] = useState<'all' | 'leido' | 'no_leido'>('all');
   const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadMessages();
-  }, []);
-
-  const loadMessages = async () => {
+  const loadMessages = useCallback(async () => {
     const filters =
       filterLeido === 'all'
         ? {}
@@ -28,11 +23,11 @@ export const MessageList: React.FC = () => {
       ...filters,
       limit: 100,
     });
-  };
+  }, [filterLeido, getMessages]);
 
   useEffect(() => {
     loadMessages();
-  }, [filterLeido]);
+  }, [loadMessages]);
 
   const handleMarkAsRead = async (messageId: string) => {
     await markAsRead(messageId);

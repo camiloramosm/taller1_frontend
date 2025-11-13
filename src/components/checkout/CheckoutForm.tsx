@@ -6,7 +6,6 @@ import { useColombiaDepartments } from '../../hooks/useColombiaDepartments';
 import {
   schemaPedido,
   validarConSchema,
-  formatearTelefono,
   normalizarTelefono,
   formatearMoneda,
 } from '../../utils/validations';
