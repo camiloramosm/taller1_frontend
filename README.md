@@ -151,38 +151,32 @@ npm run test:coverage
 - 📖 [Protección de Ramas](.github/BRANCH_PROTECTION_GUIDE.md)
 - 📖 [Documentación Completa](.github/README.md)
 
-## 🚀 Deployment Automático
+## 🚀 Deployment Automático en Vercel
 
-El proyecto se despliega automáticamente a **Vercel** después de cada merge a `main`.
+El proyecto está integrado con **Vercel** y se despliega automáticamente:
 
-### Configuración del Deployment
+### ⚡ Funcionamiento
 
-1. **Crear proyecto en Vercel**
-   - Importar desde GitHub: `camiloramosm/taller1_frontend`
-   - Framework: Vite
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
+- **Merge a `main`** → Deployment a producción (automático)
+- **Pull Request** → Preview deployment (automático)
+- **Framework detectado**: Vite
+- **Tiempo**: ~2-3 minutos
 
-2. **Configurar secrets en GitHub** (Settings → Secrets → Actions):
-   ```
-   VERCEL_TOKEN          = token de Vercel
-   VERCEL_ORG_ID         = ID de organización
-   VERCEL_PROJECT_ID     = ID del proyecto
-   VITE_SUPABASE_URL     = URL de Supabase
-   VITE_SUPABASE_ANON_KEY = Anon Key de Supabase
-   ```
+### 🔧 Configuración en Vercel
 
-3. **Merge a main** → Deployment automático
-
-### Flujo de Deployment
-
+Variables de entorno (Vercel Dashboard → Settings → Environment Variables):
 ```
-PR aprobado → Merge a main → CI pasa → Build → Deploy a Vercel → ✅ Producción
+VITE_SUPABASE_URL      = URL de tu proyecto Supabase
+VITE_SUPABASE_ANON_KEY = Anon key de Supabase
 ```
 
-**Tiempo estimado**: 2-3 minutos
+### 📊 Flujo
 
-📖 **Guía completa**: [VERCEL_DEPLOYMENT_GUIDE.md](.github/VERCEL_DEPLOYMENT_GUIDE.md)
+```
+PR → CI pasa → Merge a main → Vercel detecta → Build → Deploy → ✅ Producción
+```
+
+**No requiere configuración adicional en GitHub Actions** - Vercel maneja todo automáticamente.
 
 ## 📁 Estructura del Proyecto
 
