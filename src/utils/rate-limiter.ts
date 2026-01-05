@@ -55,8 +55,11 @@ export class RateLimiter {
       return { allowed: true, remainingAttempts: this.config.maxAttempts - 1 };
     }
 
+    // Calcular intentos restantes
+    const remainingAttempts = this.config.maxAttempts - record.count;
+    
     // Verificar si alcanzó el máximo de intentos
-    if (record.count >= this.config.maxAttempts) {
+    if (remainingAttempts <= 0) {
       // Bloquear por la misma duración de la ventana
       const blockedUntil = now + this.config.windowMs;
       this.setRecord({
@@ -67,8 +70,7 @@ export class RateLimiter {
       return { allowed: false, retryAfter };
     }
 
-    // Permitir, pero registrar el intento
-    const remainingAttempts = this.config.maxAttempts - record.count;
+    // Permitir el intento
     return { allowed: true, remainingAttempts };
   }
 
