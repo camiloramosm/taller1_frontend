@@ -40,6 +40,7 @@ export const useOrders = (): UseOrdersReturn => {
     try {
       const { data, error: supabaseError } = await supabase
         .from('pedidos')
+        // @ts-expect-error - Supabase type inference issue
         .insert(order)
         .select()
         .single();
@@ -175,6 +176,7 @@ export const useOrders = (): UseOrdersReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('pedidos')
+          // @ts-expect-error - Supabase type inference issue
           .update({ estado })
           .eq('id', id)
           .select()

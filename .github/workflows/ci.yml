@@ -5,10 +5,6 @@ on:
     branches:
       - main
       - master
-  push:
-    branches:
-      - main
-      - master
 
 jobs:
   test-and-lint:
@@ -23,27 +19,29 @@ jobs:
       - name: 📥 Checkout del código
         uses: actions/checkout@v4
 
+      - name: 📦 Instalar pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
       - name: 🟢 Configurar Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: 📦 Instalar dependencias
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
-      - name: 🔍 Ejecutar ESLint
-        run: npm run lint
-        continue-on-error: false
-
-      - name: 🧪 Ejecutar pruebas unitarias
-        run: npm run test
+      - name: 🔍 Ejecutar validación completa (ESLint + TypeScript + Tests)
+        run: pnpm run validate
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
+        continue-on-error: false
 
       - name: 📊 Generar reporte de cobertura
-        run: npm run test:coverage
+        run: pnpm run test:coverage
         continue-on-error: true
 
       - name: 📤 Subir reporte de cobertura
@@ -57,7 +55,7 @@ jobs:
           fail_ci_if_error: false
 
       - name: 🏗️ Verificar build
-        run: npm run build
+        run: pnpm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
@@ -70,17 +68,22 @@ jobs:
   #     - name: 📥 Checkout del código
   #       uses: actions/checkout@v4
 
-  #     - name: 🟢 Configurar Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '20.x'
-  #         cache: 'npm'
+      - name: 📦 Instalar pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
 
-  #     - name: 📦 Instalar dependencias
-  #       run: npm ci
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
 
-  #     - name: 🔷 Verificar tipos TypeScript
-  #       run: npx tsc --noEmit
+      - name: 📦 Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔷 Verificar tipos TypeScript
+        run: pnpm exec tsc --noEmit
 
   security-check:
     name: Verificación de Seguridad
@@ -90,17 +93,22 @@ jobs:
       - name: 📥 Checkout del código
         uses: actions/checkout@v4
 
+      - name: 📦 Instalar pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
       - name: 🟢 Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: 📦 Instalar dependencias
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: 🔒 Auditoría de seguridad
-        run: npm audit --audit-level=high
+        run: pnpm audit --audit-level=high
         continue-on-error: true
 
   code-quality:
@@ -129,13 +137,31 @@ jobs:
     steps:
       - name: 📊 Verificar resultados
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 RESUMEN DE VALIDACIONES"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Test y Lint: ${{ needs.test-and-lint.result }}"
           echo "Security Check: ${{ needs.security-check.result }}"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           
           if [ "${{ needs.test-and-lint.result }}" != "success" ]; then
-            echo "❌ Las pruebas unitarias o el linting fallaron"
+            echo "❌ FALLO: Las pruebas unitarias o el linting fallaron"
+            echo "ℹ️  Revisa los logs de 'Test y Lint' para más detalles"
             exit 1
           fi
           
-          echo "✅ Todos los checks pasaron correctamente"
+          if [ "${{ needs.type-check.result }}" != "success" ]; then
+            echo "❌ FALLO: La verificación de tipos TypeScript falló"
+            echo "ℹ️  Revisa los logs de 'Type Check' para más detalles"
+            exit 1
+          fi
+          
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ ÉXITO: Todas las validaciones pasaron"
+          echo "✓ ESLint: Sin errores ni warnings"
+          echo "✓ TypeScript: Sin errores de tipos"
+          echo "✓ Tests: Todos pasando"
+          echo "✓ Build: Compilación exitosa"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🎉 El PR está listo para merge"
 

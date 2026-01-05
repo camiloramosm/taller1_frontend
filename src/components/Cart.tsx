@@ -2,10 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useLanguage } from '../contexts/LanguageContext';
 import { formatearMoneda } from '../utils/validations';
 
 export function Cart() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const {
     items,
   isOpen,
@@ -31,9 +33,9 @@ export function Cart() {
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-[#F5E6D3] shadow-2xl z-50 flex flex-col">
         <div className="bg-black text-white p-6 flex items-center justify-between">
           <div>
-          <h2 className="text-2xl font-bold">Carrito</h2>
+          <h2 className="text-2xl font-bold">{t.cart.cartShort}</h2>
             {items.length > 0 && (
-              <p className="text-sm text-gray-300">{getTotalItems()} {getTotalItems() === 1 ? 'producto' : 'productos'}</p>
+              <p className="text-sm text-gray-300">{getTotalItems()} {getTotalItems() === 1 ? t.cart.product : t.cart.products}</p>
             )}
           </div>
           <button onClick={closeCart} className="p-2 hover:bg-gray-900 rounded-lg transition-colors">
@@ -43,12 +45,12 @@ export function Cart() {
 
         <div className="flex-1 overflow-y-auto p-6">
           {items.length === 0 ? <div className="text-center py-12">
-              <p className="text-gray-600 text-lg">Tu carrito está vacío</p>
+              <p className="text-gray-600 text-lg">{t.cart.empty}</p>
               <button
                 onClick={closeCart}
                 className="mt-4 text-black font-semibold hover:underline"
               >
-                Continuar Comprando
+                {t.cart.continueShopping}
               </button>
             </div> : <div className="space-y-4">
               {items.map(item => <div key={item.id} className="bg-white rounded-lg p-4 shadow-md">
@@ -57,7 +59,7 @@ export function Cart() {
 
                   <div className="flex-1">
                     <h3 className="font-bold text-black">{item.name}</h3>
-                      <p className="text-sm text-gray-600 mb-2">{formatearMoneda(item.price)} c/u</p>
+                      <p className="text-sm text-gray-600 mb-2">{formatearMoneda(item.price)} {t.cart.each}</p>
                       
                       {/* Control de cantidad */}
                       <div className="flex items-center space-x-2">
@@ -97,7 +99,7 @@ export function Cart() {
 
         {items.length > 0 && <div className="bg-black text-white p-6 space-y-4">
             <div className="flex justify-between text-xl font-bold">
-              <span>Total:</span>
+              <span>{t.cart.total}:</span>
               <span className="text-[#FFD700]">{formatearMoneda(total)}</span>
             </div>
 
@@ -105,14 +107,14 @@ export function Cart() {
               onClick={handleCheckout}
               className="w-full bg-[#FFD700] text-black font-bold py-4 rounded-lg hover:bg-[#FDB913] transition-all shadow-lg"
             >
-              Proceder al Pago
+              {t.cart.checkout}
             </button>
 
             <button
               onClick={closeCart}
               className="w-full text-white text-sm hover:underline"
             >
-              Continuar Comprando
+              {t.cart.continueShopping}
             </button>
           </div>}
       </div>

@@ -1,18 +1,22 @@
 import React from 'react';
 import { Youtube, Instagram, Facebook } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+
 export function SocialLinks() {
+  const { t } = useLanguage();
+
   const socialNetworks = [{
     name: 'YouTube',
     icon: Youtube,
     url: 'https://youtube.com/@elcampodedonramon',
     color: 'hover:bg-red-600',
-    description: 'Videos sobre la vida en el campo'
+    descriptionKey: 'youtube' as const
   }, {
     name: 'Instagram',
     icon: Instagram,
     url: 'https://instagram.com/elcampodedonramon',
     color: 'hover:bg-pink-600',
-    description: 'Fotos y reels del día a día'
+    descriptionKey: 'instagram' as const
   }, {
     name: 'TikTok',
     icon: () => <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
@@ -20,21 +24,22 @@ export function SocialLinks() {
         </svg>,
     url: 'https://tiktok.com/@elcampodedonramon',
     color: 'hover:bg-black',
-    description: 'Videos cortos y entretenidos'
-  }, {
+    descriptionKey: 'tiktok' as const
+  },   {
     name: 'Facebook',
     icon: Facebook,
-    url: 'https://facebook.com/elcampodedonramon',
+    url: 'https://www.facebook.com/profile.php?id=61578868924055',
     color: 'hover:bg-blue-600',
-    description: 'Comunidad y noticias'
+    descriptionKey: 'facebook' as const
   }];
+
   return <section id="redes" className="bg-[#F5E6D3] py-16 px-4">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-center mb-4 text-black">
-          <span className="text-[#FFD700]">Contacto</span> y Redes Sociales
+          <span className="text-[#FFD700]">{t.social.title}</span> {t.social.titleHighlight}
         </h2>
         <p className="text-center text-gray-700 mb-12 text-lg">
-          Síguenos en nuestras redes y mantente conectado con nosotros
+          {t.social.subtitle}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -47,7 +52,7 @@ export function SocialLinks() {
                 <h3 className="text-xl font-bold text-black mb-2">
                   {network.name}
                 </h3>
-                <p className="text-gray-600 text-sm">{network.description}</p>
+                <p className="text-gray-600 text-sm">{t.social[network.descriptionKey]}</p>
               </a>;
         })}
         </div>

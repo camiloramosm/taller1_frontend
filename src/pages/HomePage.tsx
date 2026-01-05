@@ -1,44 +1,37 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Hero } from '../components/Hero';
 import { SocialLinks } from '../components/SocialLinks';
 import { ProductGrid } from '../components/ProductGrid';
+import { useLanguage } from '../contexts/LanguageContext';
 import type { Product } from '../types';
 
-const PRODUCTS: Product[] = [
-  {
-    id: 1,
-    name: 'Camiseta Oficial',
-    price: 299,
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop',
-    description: 'Camiseta oficial de "El Campo de Don Ramón". 100% algodón, diseño exclusivo con el logo del canal.'
-  },
-  {
-    id: 2,
-    name: 'Café del Campo',
-    price: 180,
-    image: 'https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&h=800&fit=crop',
-    description: 'Café artesanal cultivado en nuestras tierras. 100% natural, tostado tradicional. Paquete de 500g.'
-  },
-  {
-    id: 3,
-    name: 'Miel Orgánica',
-    price: 250,
-    image: 'https://images.unsplash.com/photo-1587049352846-4a222e784f4f?w=800&h=800&fit=crop',
-    description: 'Miel 100% pura y orgánica de nuestras colmenas. Frasco de 500g.'
-  },
-  {
-    id: 4,
-    name: 'Queso Campesino',
-    price: 320,
-    image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800&h=800&fit=crop',
-    description: 'Queso artesanal elaborado con leche fresca de nuestras vacas. 1kg.'
-  }
-];
+// Importar imágenes locales
+import img450gr from '../images/450gr.jpeg';
+import img2500gr from '../images/2500gr.jpeg';
 
 export const HomePage: React.FC = () => {
+  const { t } = useLanguage();
+
+  const products: Product[] = useMemo(() => [
+    {
+      id: 1,
+      name: t.products.productName450,
+      price: 38000,
+      image: img450gr,
+      description: `${t.products.productDescription} ${t.products.presentation450}`
+    },
+    {
+      id: 2,
+      name: t.products.productName2500,
+      price: 175000,
+      image: img2500gr,
+      description: `${t.products.productDescription} ${t.products.presentation2500}`
+    }
+  ], [t]);
+
   return (
     <div className="min-h-screen bg-white">
-      <ProductGrid products={PRODUCTS} />
+      <ProductGrid products={products} />
       <SocialLinks />
       <Hero />
     </div>

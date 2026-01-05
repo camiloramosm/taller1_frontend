@@ -7,6 +7,7 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)
 ![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38bdf8)
 ![Vitest](https://img.shields.io/badge/Vitest-Testing-yellow)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-green)
 
 ## ✨ Características Principales
 
@@ -16,6 +17,7 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 - ✅ Selector dinámico de departamentos y ciudades de Colombia (33 departamentos)
 - ✅ Validación de teléfono colombiano (+57 con operadores válidos)
 - ✅ Cálculo automático de totales
+- ✅ **Integración con ePayco** para pagos en línea 💳
 - ✅ Confirmación de pedido con resumen completo
 - ✅ Rate limiting para prevenir spam (3 pedidos por hora)
 
@@ -45,6 +47,17 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 - ✅ Loading states en todos los formularios
 - ✅ Mensajes de error descriptivos
 - ✅ Accesibilidad con ARIA labels
+- ✅ Soporte multiidioma (Español/Inglés) 🌐
+
+### 💳 Pasarela de Pagos
+- ✅ Integración completa con **ePayco**
+- ✅ Checkout seguro con SSL
+- ✅ Soporte para múltiples métodos de pago:
+  - Tarjetas de crédito/débito
+  - PSE (transferencia bancaria)
+  - Efectivo (Baloto, Efecty, etc.)
+- ✅ Modo de pruebas para desarrollo
+- ✅ Redirección automática post-pago
 
 ## 📋 Tabla de Contenidos
 
@@ -84,6 +97,14 @@ Sigue las instrucciones en [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para:
 - Ejecutar el schema SQL
 - Obtener las credenciales
 
+4. **Configurar ePayco (Opcional - Para Pagos en Línea)**
+
+Sigue las instrucciones en [EPAYCO_SETUP.md](./EPAYCO_SETUP.md) para:
+- Crear una cuenta en ePayco
+- Obtener las credenciales (Public Key)
+- Configurar el modo de pruebas
+- Probar con tarjetas de prueba
+
 4. **Configurar variables de entorno**
 
 Crea un archivo `.env.local` en la raíz:
@@ -108,7 +129,75 @@ La aplicación estará disponible en `http://localhost:5173`
 3. Copia tus credenciales desde Settings > API
 4. Pégalas en el archivo `.env.local`
 
-Para más detalles, consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
+Para más detalles sobre Supabase, consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)  
+Para configurar ePayco, consulta [EPAYCO_SETUP.md](./EPAYCO_SETUP.md)
+
+## 🚀 CI/CD y Calidad de Código
+
+El proyecto cuenta con un pipeline de CI/CD completo que garantiza la calidad del código:
+
+### Pipeline Automático
+- ✅ **ESLint**: Verificación de estándares de código (máx. 10 warnings)
+- ✅ **TypeScript**: Verificación de tipos (0 errores)
+- ✅ **Tests Unitarios**: 34 tests automatizados
+- ✅ **Build**: Verificación de compilación
+- ✅ **Cobertura**: Mínimo 70% en líneas, funciones y branches
+
+### Protección de Ramas
+- 🔒 Pull Requests requeridos para merge a `main`
+- 🔒 CI debe pasar antes de permitir el merge
+- 🔒 Revisión de código recomendada
+
+### Comandos de Validación
+
+```bash
+# Ejecutar todas las validaciones localmente
+npm run validate
+
+# Solo linting
+npm run lint
+
+# Solo verificación de tipos
+npm run type-check
+
+# Solo tests
+npm test
+
+# Ver cobertura
+npm run test:coverage
+```
+
+### Documentación del CI/CD
+- 📖 [Guía del Pipeline](.github/workflows/PIPELINE_README.md)
+- 📖 [Protección de Ramas](.github/BRANCH_PROTECTION_GUIDE.md)
+- 📖 [Documentación Completa](.github/README.md)
+
+## 🚀 Deployment Automático en Vercel
+
+El proyecto está integrado con **Vercel** y se despliega automáticamente:
+
+### ⚡ Funcionamiento
+
+- **Merge a `main`** → Deployment a producción (automático)
+- **Pull Request** → Preview deployment (automático)
+- **Framework detectado**: Vite
+- **Tiempo**: ~2-3 minutos
+
+### 🔧 Configuración en Vercel
+
+Variables de entorno (Vercel Dashboard → Settings → Environment Variables):
+```
+VITE_SUPABASE_URL      = URL de tu proyecto Supabase
+VITE_SUPABASE_ANON_KEY = Anon key de Supabase
+```
+
+### 📊 Flujo
+
+```
+PR → CI pasa → Merge a main → Vercel detecta → Build → Deploy → ✅ Producción
+```
+
+**No requiere configuración adicional en GitHub Actions** - Vercel maneja todo automáticamente.
 
 ## 📁 Estructura del Proyecto
 
@@ -164,7 +253,8 @@ taller1/
 │   ├── index.css           # Estilos globales
 │   └── index.tsx           # Punto de entrada
 ├── supabase-schema.sql     # Schema de base de datos
-├── SUPABASE_SETUP.md       # Guía de configuración
+├── SUPABASE_SETUP.md       # Guía de configuración de Supabase
+├── EPAYCO_SETUP.md         # Guía de configuración de ePayco
 ├── vitest.config.ts        # Configuración de Vitest
 ├── vite.config.ts          # Configuración de Vite
 ├── tailwind.config.js      # Configuración de Tailwind
@@ -432,4 +522,6 @@ Si encuentras algún bug, por favor abre un issue en GitHub con:
 
 ---
 
-**¿Necesitas ayuda?** Consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para configurar la base de datos.
+**¿Necesitas ayuda?**  
+- Configuración de base de datos: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)  
+- Configuración de pagos: [EPAYCO_SETUP.md](./EPAYCO_SETUP.md)

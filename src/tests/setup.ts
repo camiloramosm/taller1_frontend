@@ -5,14 +5,16 @@ import { vi } from 'vitest';
 process.env.VITE_SUPABASE_URL = 'https://test.supabase.co';
 process.env.VITE_SUPABASE_ANON_KEY = 'test-anon-key';
 
-// Mock localStorage
+// Mock localStorage with actual implementation
+let storage: Record<string, string> = {};
+
 const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-  length: 0,
-  key: vi.fn(),
+  getItem: (key: string) => storage[key] || null,
+  setItem: (key: string, value: string) => { storage[key] = value; },
+  removeItem: (key: string) => { delete storage[key]; },
+  clear: () => { storage = {}; },
+  get length() { return Object.keys(storage).length; },
+  key: (index: number) => Object.keys(storage)[index] || null,
 };
 
 global.localStorage = localStorageMock as Storage;

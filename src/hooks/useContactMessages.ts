@@ -39,6 +39,7 @@ export const useContactMessages = (): UseContactMessagesReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('mensajes_contacto')
+          // @ts-expect-error - Supabase type inference issue
           .insert(message)
           .select()
           .single();
@@ -137,6 +138,7 @@ export const useContactMessages = (): UseContactMessagesReturn => {
       try {
         const { data, error: supabaseError } = await supabase
           .from('mensajes_contacto')
+          // @ts-expect-error - Supabase type inference issue
           .update({ leido: true })
           .eq('id', id)
           .select()

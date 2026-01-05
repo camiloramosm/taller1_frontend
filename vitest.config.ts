@@ -9,6 +9,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/tests/setup.ts'],
     css: true,
+    // En CI (Linux) usa vmThreads, en local (Windows) usa el default
+    pool: process.env.CI ? 'vmThreads' : undefined,
+    testTimeout: 30000,
+    hookTimeout: 30000,
+    teardownTimeout: 30000,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],

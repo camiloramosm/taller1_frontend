@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { Header } from './components/Header';
 import { Cart } from './components/Cart';
 import { HomePage } from './pages/HomePage';
@@ -9,7 +10,9 @@ import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
 import { AdminOrdersPage } from './pages/AdminOrdersPage';
 import { AdminMessagesPage } from './pages/AdminMessagesPage';
 
-export function App() {
+function AppContent() {
+  const { t } = useLanguage();
+
   return (
     <Router>
       <div className="min-h-screen bg-white">
@@ -26,16 +29,23 @@ export function App() {
 
         <Cart />
 
-      <footer className="bg-black text-white py-8 text-center">
-        <p className="text-gray-400">
-          © 2024 El Campo de Don Ramón. Compartiendo la vida del campo con
-          autenticidad.
-        </p>
-      </footer>
+        <footer className="bg-black text-white py-8 text-center">
+          <p className="text-gray-400">
+            {t.footer.rights}
+          </p>
+        </footer>
 
         {/* Toast Notifications */}
         <Toaster position="top-center" />
       </div>
     </Router>
+  );
+}
+
+export function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }

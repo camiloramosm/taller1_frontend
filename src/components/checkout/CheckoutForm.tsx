@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore';
 import { useOrders } from '../../hooks/useOrders';
 import { useColombiaDepartments } from '../../hooks/useColombiaDepartments';
+import { useEpayco } from '../../hooks/useEpayco';
+import { useLanguage } from '../../contexts/LanguageContext';
 import {
   schemaPedido,
   validarConSchema,
@@ -20,8 +22,10 @@ import type { ProductoEnPedido } from '../../types/database';
  */
 export const CheckoutForm: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { items, getTotalPrice, clearCart } = useCartStore();
   const { createOrder, loading } = useOrders();
+  const { isReady: epaycoReady, openCheckout } = useEpayco();
   const {
     departamentos,
     ciudades,
@@ -97,8 +101,11 @@ export const CheckoutForm: React.FC = () => {
 
     // Validar campo individual
     const result = validarConSchema(schemaPedido, formData);
-    if (!result.success && result.errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: result.errors[name] }));
+    if (!result.success) {
+      const errors = (result as { success: false; errors: Record<string, string> }).errors;
+      if (errors[name]) {
+        setErrors((prev) => ({ ...prev, [name]: errors[name] }));
+      }
     }
   };
 
@@ -123,7 +130,7 @@ export const CheckoutForm: React.FC = () => {
     const result = validarConSchema(schemaPedido, formData);
     
     if (!result.success) {
-      setErrors(result.errors);
+      setErrors((result as { success: false; errors: Record<string, string> }).errors);
       showErrorToast('Por favor, corrige los errores en el formulario');
       return;
     }
@@ -136,7 +143,7 @@ export const CheckoutForm: React.FC = () => {
       precio: item.price,
     }));
 
-    // Crear pedido
+    // Crear pedido en Supabase primero (estado pendiente)
     const response = await createOrder({
       correo_electronico: formData.correo_electronico,
       telefono: formData.telefono,
@@ -152,14 +159,46 @@ export const CheckoutForm: React.FC = () => {
       // Registrar intento en rate limiter
       pedidosRateLimiter.recordAttempt();
 
-      // Limpiar carrito
-      clearCart();
+      const pedido = response.data;
+      const total = getTotalPrice();
 
-      // Mostrar mensaje de éxito
-      showSuccessToast('¡Pedido realizado con éxito!');
+      // Abrir checkout de ePayco
+      if (epaycoReady) {
+        openCheckout({
+          // Información del producto/servicio
+          name: 'EL CAMPO DE DON RAMÓN',
+          description: `Pedido #${pedido.id.substring(0, 8)} - ${items.length} producto(s)`,
+          invoice: pedido.id,
+          currency: 'cop',
+          amount: total.toString(),
+          tax_base: '0',
+          tax: '0',
+          country: 'co',
+          lang: t.header.about === 'About Us' ? 'en' : 'es',
+          
+          // Información del comprador
+          external: 'false',
+          name_billing: formData.correo_electronico.split('@')[0],
+          address_billing: formData.direccion_completa,
+          mobilephone_billing: formData.telefono,
+          number_doc_billing: '000000000', // Opcional: podrías agregar un campo para cédula
+          
+          // Datos adicionales
+          extra1: pedido.id,
+          extra2: formData.correo_electronico,
+          extra3: formData.telefono,
+          
+          // URLs de respuesta
+          response: `${window.location.origin}/confirmacion/${pedido.id}`,
+          confirmation: `${window.location.origin}/api/epayco/confirmation`,
+        });
 
-      // Redirigir a confirmación
-      navigate(`/confirmacion/${response.data.id}`);
+        // Limpiar carrito solo después de abrir el checkout
+        clearCart();
+        showSuccessToast('Redirigiendo a la pasarela de pago...');
+      } else {
+        showErrorToast('Error al inicializar la pasarela de pagos. Por favor, recarga la página.');
+      }
     } else {
       showErrorToast(response.error || 'Error al procesar el pedido');
     }
@@ -370,11 +409,37 @@ export const CheckoutForm: React.FC = () => {
 
             <button
               type="submit"
-              disabled={loading || items.length === 0}
-              className="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              disabled={loading || items.length === 0 || !epaycoReady}
+              className="w-full bg-[#FFD700] text-black py-3 px-6 rounded-lg font-bold hover:bg-[#FDB913] disabled:bg-gray-400 disabled:cursor-not-allowed transition-all shadow-lg flex items-center justify-center gap-2"
             >
-              {loading ? 'Procesando...' : `Realizar Pedido - ${formatearMoneda(totalPrice)}`}
+              {loading ? (
+                'Procesando...'
+              ) : !epaycoReady ? (
+                'Cargando pasarela de pagos...'
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                  </svg>
+                  Pagar con ePayco - {formatearMoneda(totalPrice)}
+                </>
+              )}
             </button>
+            
+            {!epaycoReady && (
+              <p className="text-xs text-gray-600 text-center mt-2">
+                Preparando pasarela de pagos segura...
+              </p>
+            )}
+            
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <img 
+                src="https://multimedia.epayco.co/epayco/logos/logo-epayco.png" 
+                alt="ePayco" 
+                className="h-6"
+              />
+              <span className="text-xs text-gray-500">Pago seguro</span>
+            </div>
           </form>
         </div>
 

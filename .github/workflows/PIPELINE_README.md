@@ -239,12 +239,44 @@ npx tsc --noEmit
 
 ---
 
+## 🔒 Protección de Ramas
+
+Para asegurar que **solo se puedan hacer merge de PRs que pasen todas las validaciones**, debes configurar las protecciones de rama en GitHub.
+
+### Configuración Rápida
+
+**Ve a la guía completa**: [`BRANCH_PROTECTION_GUIDE.md`](../BRANCH_PROTECTION_GUIDE.md)
+
+La guía incluye:
+- ✅ Paso a paso para configurar protección de ramas
+- ✅ Configuración recomendada
+- ✅ Cómo funcionan los status checks
+- ✅ Flujo de trabajo con protección
+- ✅ Solución de problemas
+
+### Resumen Rápido
+
+1. Ve a **Settings** → **Branches** → **Add rule**
+2. Branch name pattern: `main`
+3. Marca:
+   - ✅ Require a pull request before merging
+   - ✅ Require status checks to pass before merging
+     - Selecciona: "Pruebas Unitarias y Linting", "Verificación de Tipos", "Estado Final del Pipeline"
+   - ✅ Include administrators
+   - ❌ Allow force pushes (desmarcar)
+   - ❌ Allow deletions (desmarcar)
+
+**Resultado**: No se podrá hacer merge si el CI falla ✅
+
+---
+
 ## 📚 Referencias
 
 - [GitHub Actions](https://docs.github.com/en/actions)
 - [Vitest](https://vitest.dev/)
 - [SonarCloud](https://sonarcloud.io/)
 - [Codecov](https://codecov.io/)
+- [Branch Protection Rules](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches)
 
 ---
 
