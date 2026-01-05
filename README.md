@@ -17,6 +17,7 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 - ✅ Selector dinámico de departamentos y ciudades de Colombia (33 departamentos)
 - ✅ Validación de teléfono colombiano (+57 con operadores válidos)
 - ✅ Cálculo automático de totales
+- ✅ **Integración con ePayco** para pagos en línea 💳
 - ✅ Confirmación de pedido con resumen completo
 - ✅ Rate limiting para prevenir spam (3 pedidos por hora)
 
@@ -46,6 +47,17 @@ Sistema completo de e-commerce desarrollado en React con TypeScript, integrado c
 - ✅ Loading states en todos los formularios
 - ✅ Mensajes de error descriptivos
 - ✅ Accesibilidad con ARIA labels
+- ✅ Soporte multiidioma (Español/Inglés) 🌐
+
+### 💳 Pasarela de Pagos
+- ✅ Integración completa con **ePayco**
+- ✅ Checkout seguro con SSL
+- ✅ Soporte para múltiples métodos de pago:
+  - Tarjetas de crédito/débito
+  - PSE (transferencia bancaria)
+  - Efectivo (Baloto, Efecty, etc.)
+- ✅ Modo de pruebas para desarrollo
+- ✅ Redirección automática post-pago
 
 ## 📋 Tabla de Contenidos
 
@@ -85,6 +97,14 @@ Sigue las instrucciones en [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para:
 - Ejecutar el schema SQL
 - Obtener las credenciales
 
+4. **Configurar ePayco (Opcional - Para Pagos en Línea)**
+
+Sigue las instrucciones en [EPAYCO_SETUP.md](./EPAYCO_SETUP.md) para:
+- Crear una cuenta en ePayco
+- Obtener las credenciales (Public Key)
+- Configurar el modo de pruebas
+- Probar con tarjetas de prueba
+
 4. **Configurar variables de entorno**
 
 Crea un archivo `.env.local` en la raíz:
@@ -109,7 +129,8 @@ La aplicación estará disponible en `http://localhost:5173`
 3. Copia tus credenciales desde Settings > API
 4. Pégalas en el archivo `.env.local`
 
-Para más detalles, consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
+Para más detalles sobre Supabase, consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)  
+Para configurar ePayco, consulta [EPAYCO_SETUP.md](./EPAYCO_SETUP.md)
 
 ## 🚀 CI/CD y Calidad de Código
 
@@ -232,7 +253,8 @@ taller1/
 │   ├── index.css           # Estilos globales
 │   └── index.tsx           # Punto de entrada
 ├── supabase-schema.sql     # Schema de base de datos
-├── SUPABASE_SETUP.md       # Guía de configuración
+├── SUPABASE_SETUP.md       # Guía de configuración de Supabase
+├── EPAYCO_SETUP.md         # Guía de configuración de ePayco
 ├── vitest.config.ts        # Configuración de Vitest
 ├── vite.config.ts          # Configuración de Vite
 ├── tailwind.config.js      # Configuración de Tailwind
@@ -500,4 +522,6 @@ Si encuentras algún bug, por favor abre un issue en GitHub con:
 
 ---
 
-**¿Necesitas ayuda?** Consulta [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) para configurar la base de datos.
+**¿Necesitas ayuda?**  
+- Configuración de base de datos: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)  
+- Configuración de pagos: [EPAYCO_SETUP.md](./EPAYCO_SETUP.md)
