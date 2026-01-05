@@ -427,19 +427,42 @@ export const CheckoutForm: React.FC = () => {
             </button>
             
             {epaycoLoading && !epaycoReady && !epaycoError && (
-              <p className="text-xs text-gray-600 text-center mt-2">
-                Preparando pasarela de pagos segura...
-              </p>
+              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center justify-center gap-2">
+                  <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                  <p className="text-xs text-blue-700">
+                    Preparando pasarela de pagos segura...
+                  </p>
+                </div>
+              </div>
             )}
             
             {epaycoError && (
-              <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-xs text-red-600 text-center">
-                  ⚠️ {epaycoError}
-                </p>
-                <p className="text-xs text-red-500 text-center mt-1">
-                  Por favor, recarga la página e intenta nuevamente.
-                </p>
+              <div className="mt-2 p-4 bg-red-50 border-2 border-red-300 rounded-lg">
+                <div className="flex items-start gap-3">
+                  <svg className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-red-800 mb-1">
+                      Error al cargar la pasarela de pagos
+                    </p>
+                    <p className="text-xs text-red-600 mb-2">
+                      {epaycoError}
+                    </p>
+                    <details className="text-xs text-red-700">
+                      <summary className="cursor-pointer font-medium hover:underline">
+                        ¿Cómo solucionar esto?
+                      </summary>
+                      <ul className="mt-2 ml-4 list-disc space-y-1">
+                        <li>Verifica que las variables de entorno estén configuradas en Vercel</li>
+                        <li>Asegúrate de haber hecho redeploy después de agregar las variables</li>
+                        <li>Limpia la caché del navegador (Ctrl+Shift+R o Cmd+Shift+R)</li>
+                        <li>Si el problema persiste, contacta con soporte</li>
+                      </ul>
+                    </details>
+                  </div>
+                </div>
               </div>
             )}
             

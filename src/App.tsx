@@ -7,6 +7,7 @@ import { HomePage } from './pages/HomePage';
 import { ContactPage } from './pages/ContactPage';
 import { CheckoutPage } from './pages/CheckoutPage';
 import { ConfirmacionPage } from './pages/ConfirmacionPage';
+import { DiagnosticoPage } from './pages/DiagnosticoPage';
 import { AdminOrdersPage } from './pages/AdminOrdersPage';
 import { AdminMessagesPage } from './pages/AdminMessagesPage';
 
@@ -23,6 +24,7 @@ function AppContent() {
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/confirmacion/:pedidoId" element={<ConfirmacionPage />} />
+          <Route path="/diagnostico" element={<DiagnosticoPage />} />
           <Route path="/admin/pedidos" element={<AdminOrdersPage />} />
           <Route path="/admin/mensajes" element={<AdminMessagesPage />} />
         </Routes>
