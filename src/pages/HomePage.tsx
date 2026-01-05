@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Hero } from '../components/Hero';
 import { SocialLinks } from '../components/SocialLinks';
 import { ProductGrid } from '../components/ProductGrid';
@@ -12,7 +12,7 @@ import img2500gr from '../images/2500gr.jpeg';
 export const HomePage: React.FC = () => {
   const { t } = useLanguage();
 
-  const PRODUCTS: Product[] = [
+  const products: Product[] = useMemo(() => [
     {
       id: 1,
       name: t.products.productName450,
@@ -27,11 +27,11 @@ export const HomePage: React.FC = () => {
       image: img2500gr,
       description: `${t.products.productDescription} ${t.products.presentation2500}`
     }
-  ];
+  ], [t]);
 
   return (
     <div className="min-h-screen bg-white">
-      <ProductGrid products={PRODUCTS} />
+      <ProductGrid products={products} />
       <SocialLinks />
       <Hero />
     </div>

@@ -9,22 +9,22 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Detectar el idioma del navegador
-const detectBrowserLanguage = (): Language => {
-  const browserLang = navigator.language.toLowerCase();
-  if (browserLang.startsWith('es')) {
-    return 'es';
-  }
-  return 'en'; // Default a inglés si no es español
-};
-
-// Obtener idioma guardado o detectar del navegador
-const getInitialLanguage = (): Language => {
-  const savedLang = localStorage.getItem('language') as Language | null;
-  return savedLang || detectBrowserLanguage();
-};
-
 export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  // Detectar el idioma del navegador
+  const detectBrowserLanguage = (): Language => {
+    const browserLang = navigator.language.toLowerCase();
+    if (browserLang.startsWith('es')) {
+      return 'es';
+    }
+    return 'en'; // Default a inglés si no es español
+  };
+
+  // Obtener idioma guardado o detectar del navegador
+  const getInitialLanguage = (): Language => {
+    const savedLang = localStorage.getItem('language') as Language | null;
+    return savedLang || detectBrowserLanguage();
+  };
+
   const [language, setLanguageState] = useState<Language>(getInitialLanguage);
 
   const setLanguage = (lang: Language) => {
@@ -46,6 +46,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (!context) {

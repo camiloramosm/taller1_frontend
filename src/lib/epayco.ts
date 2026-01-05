@@ -74,7 +74,7 @@ export const loadEpaycoScript = (): Promise<void> => {
 // Configurar ePayco Checkout
 export const configureEpaycoCheckout = (
   publicKey: string,
-  testMode: boolean = false
+  testMode = false
 ): EpaycoHandler | null => {
   if (!window.ePayco) {
     console.error('ePayco no está cargado');
