@@ -6,7 +6,7 @@ import { Cart } from './components/Cart';
 import { HomePage } from './pages/HomePage';
 import { ContactPage } from './pages/ContactPage';
 import { CheckoutPage } from './pages/CheckoutPage';
-import { OrderConfirmationPage } from './pages/OrderConfirmationPage';
+import { ConfirmacionPage } from './pages/ConfirmacionPage';
 import { AdminOrdersPage } from './pages/AdminOrdersPage';
 import { AdminMessagesPage } from './pages/AdminMessagesPage';
 
@@ -22,7 +22,7 @@ function AppContent() {
           <Route path="/" element={<HomePage />} />
           <Route path="/contacto" element={<ContactPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/confirmacion/:orderId" element={<OrderConfirmationPage />} />
+          <Route path="/confirmacion/:pedidoId" element={<ConfirmacionPage />} />
           <Route path="/admin/pedidos" element={<AdminOrdersPage />} />
           <Route path="/admin/mensajes" element={<AdminMessagesPage />} />
         </Routes>

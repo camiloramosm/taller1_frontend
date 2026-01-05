@@ -57,15 +57,37 @@ export const loadEpaycoScript = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     // Si ya está cargado, resolver inmediatamente
     if (window.ePayco) {
+      console.log('✅ ePayco ya está cargado');
       resolve();
       return;
     }
 
+    // Verificar si ya existe un script de ePayco cargándose
+    const existingScript = document.querySelector('script[src*="checkout.epayco.co"]');
+    if (existingScript) {
+      console.log('⏳ Script de ePayco ya está cargándose...');
+      // Esperar a que termine de cargar
+      existingScript.addEventListener('load', () => resolve());
+      existingScript.addEventListener('error', () => reject(new Error('Error al cargar el script de ePayco')));
+      return;
+    }
+
+    console.log('📥 Cargando script de ePayco...');
     const script = document.createElement('script');
     script.src = 'https://checkout.epayco.co/checkout.js';
     script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error('Error al cargar el script de ePayco'));
+    script.setAttribute('data-epayco', 'true');
+    
+    script.onload = () => {
+      console.log('✅ Script de ePayco cargado exitosamente');
+      // Dar un pequeño tiempo para que ePayco se inicialice
+      setTimeout(() => resolve(), 100);
+    };
+    
+    script.onerror = (error) => {
+      console.error('❌ Error al cargar el script de ePayco:', error);
+      reject(new Error('No se pudo cargar la pasarela de pagos. Verifica tu conexión a internet.'));
+    };
     
     document.body.appendChild(script);
   });

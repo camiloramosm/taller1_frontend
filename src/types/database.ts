@@ -22,6 +22,8 @@ export interface Database {
           productos: ProductoEnPedido[]
           total: number
           estado: EstadoPedido
+          estado_pago: EstadoPago
+          referencia_pago: string | null
           notas_adicionales: string | null
         }
         Insert: {
@@ -35,6 +37,8 @@ export interface Database {
           productos: ProductoEnPedido[]
           total: number
           estado?: EstadoPedido
+          estado_pago?: EstadoPago
+          referencia_pago?: string | null
           notas_adicionales?: string | null
         }
         Update: {
@@ -48,6 +52,8 @@ export interface Database {
           productos?: ProductoEnPedido[]
           total?: number
           estado?: EstadoPedido
+          estado_pago?: EstadoPago
+          referencia_pago?: string | null
           notas_adicionales?: string | null
         }
       }
@@ -89,6 +95,7 @@ export interface Database {
 
 // Tipos auxiliares
 export type EstadoPedido = 'pendiente' | 'procesando' | 'enviado' | 'entregado' | 'cancelado';
+export type EstadoPago = 'pendiente' | 'procesando' | 'aprobado' | 'rechazado' | 'reembolsado';
 
 export interface ProductoEnPedido {
   id: number;
