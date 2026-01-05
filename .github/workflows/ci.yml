@@ -1,4 +1,4 @@
-name: CI - Pruebas y Calidad de Código
+name: 🔍 CI - Pruebas y Calidad de Código
 
 on:
   pull_request:
