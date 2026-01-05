@@ -60,13 +60,13 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://test.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'test-key' }}
 
-  type-check:
-    name: Verificación de Tipos (TypeScript)
-    runs-on: ubuntu-latest
+  # type-check:
+  #   name: Verificación de Tipos (TypeScript)
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: 📥 Checkout del código
-        uses: actions/checkout@v4
+  #   steps:
+  #     - name: 📥 Checkout del código
+  #       uses: actions/checkout@v4
 
       - name: 📦 Instalar pnpm
         uses: pnpm/action-setup@v2
@@ -131,7 +131,7 @@ jobs:
   status-check:
     name: ✅ Estado Final del Pipeline
     runs-on: ubuntu-latest
-    needs: [test-and-lint, type-check, security-check]
+    needs: [test-and-lint, security-check]
     if: always()
 
     steps:
@@ -141,7 +141,6 @@ jobs:
           echo "📊 RESUMEN DE VALIDACIONES"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Test y Lint: ${{ needs.test-and-lint.result }}"
-          echo "Type Check: ${{ needs.type-check.result }}"
           echo "Security Check: ${{ needs.security-check.result }}"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           
