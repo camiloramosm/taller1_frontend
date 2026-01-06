@@ -112,12 +112,15 @@ export const CheckoutForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // ⚠️ RATE LIMITER DESHABILITADO TEMPORALMENTE PARA PRUEBAS
+    /*
     // Verificar rate limiting
     const rateLimitCheck = pedidosRateLimiter.canAttempt();
     if (!rateLimitCheck.allowed) {
       showErrorToast(formatearMensajeRateLimit(rateLimitCheck.retryAfter || 3600));
       return;
     }
+    */
 
     // Marcar todos los campos como touched
     const allTouched: Record<string, boolean> = {};
@@ -156,8 +159,8 @@ export const CheckoutForm: React.FC = () => {
     });
 
     if (response.success && response.data) {
-      // Registrar intento en rate limiter
-      pedidosRateLimiter.recordAttempt();
+      // ⚠️ RATE LIMITER DESHABILITADO TEMPORALMENTE PARA PRUEBAS
+      // pedidosRateLimiter.recordAttempt();
 
       const pedido = response.data;
       const total = getTotalPrice();
