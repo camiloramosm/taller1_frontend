@@ -67,12 +67,15 @@ export const ContactForm: React.FC = () => {
     e.preventDefault();
     setSubmitSuccess(false);
 
+    // ⚠️ RATE LIMITER DESHABILITADO TEMPORALMENTE PARA PRUEBAS
+    /*
     // Verificar rate limiting
     const rateLimitCheck = contactoRateLimiter.canAttempt();
     if (!rateLimitCheck.allowed) {
       showErrorToast(formatearMensajeRateLimit(rateLimitCheck.retryAfter || 3600));
       return;
     }
+    */
 
     // Marcar todos los campos como touched
     const allTouched: Record<string, boolean> = {};
@@ -99,8 +102,8 @@ export const ContactForm: React.FC = () => {
     });
 
     if (response.success) {
-      // Registrar intento en rate limiter
-      contactoRateLimiter.recordAttempt();
+      // ⚠️ RATE LIMITER DESHABILITADO TEMPORALMENTE PARA PRUEBAS
+      // contactoRateLimiter.recordAttempt();
 
       // Mostrar mensaje de éxito
       showSuccessToast('¡Mensaje enviado con éxito! Te responderemos pronto.');
