@@ -6,8 +6,8 @@ export const SITE_CONFIG = {
   // Datos de contacto
   contacto: {
     email: 'contacto@elcampodedonramon.com',
-    telefono: '+57 318 741 0586',
-    whatsapp: '573187410586',
+    telefono: '+57 301 931 1827',
+    whatsapp: '573019311827',
   },
   
   // Redes sociales
