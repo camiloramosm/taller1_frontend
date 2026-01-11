@@ -230,13 +230,19 @@ export default function CheckoutPage() {
                         value={formData.codigo_pais}
                         onValueChange={(value) => setFormData({ ...formData, codigo_pais: value })}
                       >
-                        <SelectTrigger className="w-[140px]">
-                          <SelectValue />
+                        <SelectTrigger className="w-[130px]">
+                          <SelectValue>
+                            {CODIGOS_PAISES.find(p => p.codigo === formData.codigo_pais)?.bandera} {formData.codigo_pais}
+                          </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           {CODIGOS_PAISES.map((pais) => (
                             <SelectItem key={pais.codigo} value={pais.codigo}>
-                              {pais.bandera} {pais.codigo}
+                              <span className="flex items-center gap-2">
+                                <span>{pais.bandera}</span>
+                                <span>{pais.codigo}</span>
+                                <span className="text-muted-foreground text-xs">{pais.pais}</span>
+                              </span>
                             </SelectItem>
                           ))}
                         </SelectContent>
