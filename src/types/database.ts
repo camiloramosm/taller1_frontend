@@ -111,4 +111,3 @@ export type ActualizarPedido = Database['public']['Tables']['pedidos']['Update']
 export type MensajeContacto = Database['public']['Tables']['mensajes_contacto']['Row'];
 export type NuevoMensajeContacto = Database['public']['Tables']['mensajes_contacto']['Insert'];
 export type ActualizarMensajeContacto = Database['public']['Tables']['mensajes_contacto']['Update'];
-

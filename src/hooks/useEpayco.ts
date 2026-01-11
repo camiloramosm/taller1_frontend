@@ -1,21 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import {
-  loadEpaycoScript,
-  configureEpaycoCheckout,
-  getEpaycoConfig,
-  EpaycoCheckoutData,
-  EpaycoHandler,
-} from '../lib/epayco';
+'use client';
 
-interface UseEpaycoReturn {
-  isReady: boolean;
-  isLoading: boolean;
-  error: string | null;
-  openCheckout: (data: EpaycoCheckoutData) => void;
-  closeCheckout: () => void;
-}
+import { useState, useEffect } from 'react';
+import { loadEpaycoScript, configureEpaycoCheckout, getEpaycoConfig } from '@/lib/epayco';
+import type { EpaycoHandler, EpaycoCheckoutData } from '@/lib/epayco';
 
-export const useEpayco = (): UseEpaycoReturn => {
+export const useEpayco = () => {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,25 +19,26 @@ export const useEpayco = (): UseEpaycoReturn => {
         // Cargar el script de ePayco
         await loadEpaycoScript();
 
-        // Configurar el checkout
-        const { publicKey, testMode } = getEpaycoConfig();
-        
-        if (!publicKey) {
+        // Obtener configuración
+        const config = getEpaycoConfig();
+
+        if (!config.publicKey) {
           throw new Error('La clave pública de ePayco no está configurada');
         }
 
-        const epaycoHandler = configureEpaycoCheckout(publicKey, testMode);
-        
-        if (!epaycoHandler) {
+        // Configurar checkout
+        const checkoutHandler = configureEpaycoCheckout(config.publicKey, config.testMode);
+
+        if (!checkoutHandler) {
           throw new Error('No se pudo configurar ePayco');
         }
 
-        setHandler(epaycoHandler);
+        setHandler(checkoutHandler);
         setIsReady(true);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Error al inicializar ePayco';
-        setError(errorMessage);
-        console.error('Error inicializando ePayco:', err);
+        console.error('Error al inicializar ePayco:', err);
+        setError(err instanceof Error ? err.message : 'Error desconocido');
+        setIsReady(false);
       } finally {
         setIsLoading(false);
       }
@@ -57,40 +47,24 @@ export const useEpayco = (): UseEpaycoReturn => {
     initEpayco();
   }, []);
 
-  const openCheckout = useCallback(
-    (data: EpaycoCheckoutData) => {
-      if (!handler) {
-        console.error('ePayco no está listo');
-        return;
-      }
-
-      try {
-        handler.open(data);
-      } catch (err) {
-        console.error('Error al abrir checkout de ePayco:', err);
-      }
-    },
-    [handler]
-  );
-
-  const closeCheckout = useCallback(() => {
+  const openCheckout = (data: EpaycoCheckoutData) => {
     if (!handler) {
+      console.error('ePayco no está listo');
       return;
     }
 
     try {
-      handler.close();
+      handler.open(data);
     } catch (err) {
-      console.error('Error al cerrar checkout de ePayco:', err);
+      console.error('Error al abrir checkout de ePayco:', err);
+      setError(err instanceof Error ? err.message : 'Error al abrir checkout');
     }
-  }, [handler]);
+  };
 
   return {
     isReady,
     isLoading,
     error,
     openCheckout,
-    closeCheckout,
   };
 };
-

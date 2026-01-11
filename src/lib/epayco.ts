@@ -1,3 +1,5 @@
+'use client';
+
 // Tipos de ePayco
 export interface EpaycoCheckoutConfig {
   key: string;
@@ -55,6 +57,12 @@ declare global {
 // Cargar el script de ePayco
 export const loadEpaycoScript = (): Promise<void> => {
   return new Promise((resolve, reject) => {
+    // Solo funciona en el navegador
+    if (typeof window === 'undefined') {
+      reject(new Error('ePayco solo funciona en el navegador'));
+      return;
+    }
+
     // Si ya está cargado, resolver inmediatamente
     if (window.ePayco) {
       console.log('✅ ePayco ya está cargado');
@@ -98,6 +106,10 @@ export const configureEpaycoCheckout = (
   publicKey: string,
   testMode = false
 ): EpaycoHandler | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   if (!window.ePayco) {
     console.error('ePayco no está cargado');
     return null;
@@ -111,19 +123,18 @@ export const configureEpaycoCheckout = (
 
 // Obtener configuración desde variables de entorno
 export const getEpaycoConfig = () => {
-  const publicKey = import.meta.env.VITE_EPAYCO_PUBLIC_KEY;
-  const testMode = import.meta.env.VITE_EPAYCO_TEST_MODE === 'true';
+  const publicKey = process.env.NEXT_PUBLIC_EPAYCO_PUBLIC_KEY;
+  const testMode = process.env.NEXT_PUBLIC_EPAYCO_TEST_MODE === 'true';
 
   console.log('🔍 Configuración de ePayco:');
   console.log('  - Public Key:', publicKey ? `${publicKey.substring(0, 10)}...` : '❌ NO CONFIGURADA');
   console.log('  - Test Mode:', testMode);
-  console.log('  - Variables disponibles:', Object.keys(import.meta.env).filter(k => k.startsWith('VITE_')));
 
   if (!publicKey) {
-    console.error('❌ VITE_EPAYCO_PUBLIC_KEY no está configurada');
+    console.error('❌ NEXT_PUBLIC_EPAYCO_PUBLIC_KEY no está configurada');
     console.error('💡 Solución:');
     console.error('   1. Ve a Vercel → Settings → Environment Variables');
-    console.error('   2. Agrega: VITE_EPAYCO_PUBLIC_KEY = 68d10a49ae848d5772c2e05844c8b37c');
+    console.error('   2. Agrega: NEXT_PUBLIC_EPAYCO_PUBLIC_KEY = 68d10a49ae848d5772c2e05844c8b37c');
     console.error('   3. Haz Redeploy del proyecto');
   }
 
@@ -132,4 +143,3 @@ export const getEpaycoConfig = () => {
     testMode,
   };
 };
-
