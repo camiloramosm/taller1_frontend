@@ -319,11 +319,11 @@ export default function ConfirmacionPage() {
                       <div className="space-y-1 text-sm">
                         <p className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          {pedido.correo_electronico}
+                          contacto@elcampodedonramon.com
                         </p>
                         <p className="flex items-center gap-2">
                           <Phone className="w-4 h-4" />
-                          {pedido.telefono}
+                          +57 318 741 0586
                         </p>
                       </div>
                     </div>
