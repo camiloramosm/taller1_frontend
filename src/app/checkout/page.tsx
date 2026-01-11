@@ -54,8 +54,8 @@ export default function CheckoutPage() {
       newErrors.correo_electronico = 'Correo electrónico no válido';
     }
 
-    if (!formData.telefono || !/^\+?57\s?\d{10}$/.test(formData.telefono.replace(/\s/g, ''))) {
-      newErrors.telefono = 'Teléfono no válido (formato: +57XXXXXXXXXX)';
+    if (!formData.telefono || !/^\d{10}$/.test(formData.telefono.replace(/\D/g, '').slice(-10))) {
+      newErrors.telefono = 'Teléfono no válido (10 dígitos)';
     }
 
     if (!formData.departamento) {
@@ -97,10 +97,10 @@ export default function CheckoutPage() {
 
     const total = totalPrice();
 
-    // Normalizar teléfono: asegurar formato +57XXXXXXXXXX
+    // Normalizar teléfono: solo los 10 dígitos
     const telefonoNormalizado = formData.telefono
       .replace(/\s/g, '') // Quitar espacios
-      .replace(/^\+?57/, '+57'); // Asegurar +57 al inicio
+      .replace(/^\+?57/, ''); // Quitar código de país
 
     // Crear pedido en Supabase primero (estado pendiente)
     const response = await createOrder({
