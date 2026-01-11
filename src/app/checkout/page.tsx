@@ -17,8 +17,33 @@ import { DEPARTAMENTOS_COLOMBIA } from '@/data/colombia-departamentos';
 import Link from 'next/link';
 import type { ProductoEnPedido } from '@/types/database';
 
+// Lista de países con códigos telefónicos
+const CODIGOS_PAISES = [
+  { codigo: '+57', pais: 'Colombia', bandera: '🇨🇴' },
+  { codigo: '+1', pais: 'Estados Unidos', bandera: '🇺🇸' },
+  { codigo: '+52', pais: 'México', bandera: '🇲🇽' },
+  { codigo: '+34', pais: 'España', bandera: '🇪🇸' },
+  { codigo: '+54', pais: 'Argentina', bandera: '🇦🇷' },
+  { codigo: '+56', pais: 'Chile', bandera: '🇨🇱' },
+  { codigo: '+51', pais: 'Perú', bandera: '🇵🇪' },
+  { codigo: '+593', pais: 'Ecuador', bandera: '🇪🇨' },
+  { codigo: '+58', pais: 'Venezuela', bandera: '🇻🇪' },
+  { codigo: '+507', pais: 'Panamá', bandera: '🇵🇦' },
+  { codigo: '+506', pais: 'Costa Rica', bandera: '🇨🇷' },
+  { codigo: '+502', pais: 'Guatemala', bandera: '🇬🇹' },
+  { codigo: '+591', pais: 'Bolivia', bandera: '🇧🇴' },
+  { codigo: '+595', pais: 'Paraguay', bandera: '🇵🇾' },
+  { codigo: '+598', pais: 'Uruguay', bandera: '🇺🇾' },
+  { codigo: '+55', pais: 'Brasil', bandera: '🇧🇷' },
+  { codigo: '+44', pais: 'Reino Unido', bandera: '🇬🇧' },
+  { codigo: '+33', pais: 'Francia', bandera: '🇫🇷' },
+  { codigo: '+49', pais: 'Alemania', bandera: '🇩🇪' },
+  { codigo: '+39', pais: 'Italia', bandera: '🇮🇹' },
+];
+
 interface FormData {
   correo_electronico: string;
+  codigo_pais: string;
   telefono: string;
   departamento: string;
   ciudad: string;
@@ -38,6 +63,7 @@ export default function CheckoutPage() {
 
   const [formData, setFormData] = useState<FormData>({
     correo_electronico: '',
+    codigo_pais: '+57',
     telefono: '',
     departamento: '',
     ciudad: '',
@@ -97,8 +123,9 @@ export default function CheckoutPage() {
 
     const total = totalPrice();
 
-    // Normalizar teléfono: solo dígitos
-    const telefonoNormalizado = formData.telefono.replace(/\D/g, '');
+    // Normalizar teléfono: código de país + número
+    const soloDigitos = formData.telefono.replace(/\D/g, '');
+    const telefonoNormalizado = `${formData.codigo_pais}${soloDigitos}`;
 
     // Crear pedido en Supabase primero (estado pendiente)
     const response = await createOrder({
@@ -198,14 +225,31 @@ export default function CheckoutPage() {
                   {/* Teléfono */}
                   <div>
                     <Label htmlFor="telefono">Teléfono *</Label>
-                    <Input
-                      id="telefono"
-                      type="tel"
-                      value={formData.telefono}
-                      onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                      className={errors.telefono ? 'border-red-500' : ''}
-                      placeholder="+57 301 1234567"
-                    />
+                    <div className="flex gap-2">
+                      <Select
+                        value={formData.codigo_pais}
+                        onValueChange={(value) => setFormData({ ...formData, codigo_pais: value })}
+                      >
+                        <SelectTrigger className="w-[130px]">
+                          <SelectValue placeholder="🇨🇴 +57" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {CODIGOS_PAISES.map((pais) => (
+                            <SelectItem key={pais.codigo} value={pais.codigo}>
+                              {pais.bandera} {pais.codigo} - {pais.pais}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        id="telefono"
+                        type="tel"
+                        value={formData.telefono}
+                        onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                        className={`flex-1 ${errors.telefono ? 'border-red-500' : ''}`}
+                        placeholder="301 1234567"
+                      />
+                    </div>
                     {errors.telefono && (
                       <p className="text-sm text-red-500 mt-1">{errors.telefono}</p>
                     )}
