@@ -97,10 +97,15 @@ export default function CheckoutPage() {
 
     const total = totalPrice();
 
+    // Normalizar teléfono: asegurar formato +57XXXXXXXXXX
+    const telefonoNormalizado = formData.telefono
+      .replace(/\s/g, '') // Quitar espacios
+      .replace(/^\+?57/, '+57'); // Asegurar +57 al inicio
+
     // Crear pedido en Supabase primero (estado pendiente)
     const response = await createOrder({
       correo_electronico: formData.correo_electronico,
-      telefono: formData.telefono,
+      telefono: telefonoNormalizado,
       departamento: formData.departamento,
       ciudad: formData.ciudad,
       direccion_completa: formData.direccion_completa,
