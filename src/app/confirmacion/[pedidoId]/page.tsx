@@ -245,7 +245,7 @@ export default function ConfirmacionPage() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">Fecha:</span>
-                      <span className="font-semibold">
+                      <span className="font-semibold" suppressHydrationWarning>
                         {new Date(pedido.created_at).toLocaleDateString('es-CO', {
                           year: 'numeric',
                           month: 'long',
@@ -258,7 +258,7 @@ export default function ConfirmacionPage() {
 
                     <div className="flex justify-between items-center pt-2 border-t">
                       <span className="text-muted-foreground font-semibold">Total:</span>
-                      <span className="font-bold text-2xl text-primary">
+                      <span className="font-bold text-2xl text-primary" suppressHydrationWarning>
                         ${pedido.total.toLocaleString('es-CO')}
                       </span>
                     </div>
