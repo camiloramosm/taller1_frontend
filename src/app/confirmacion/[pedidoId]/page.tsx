@@ -9,6 +9,7 @@ import { CheckCircle2, XCircle, Clock, AlertTriangle, Home, RotateCcw, Mail, Pho
 import Link from 'next/link';
 import type { Pedido } from '@/types/database';
 import { motion } from 'framer-motion';
+import { SITE_CONFIG } from '@/config/site';
 
 type EstadoPago = 'procesando' | 'aprobado' | 'rechazado' | 'pendiente' | 'error';
 
@@ -244,7 +245,7 @@ export default function ConfirmacionPage() {
                     
                     <div className="flex justify-between items-center">
                       <span className="text-muted-foreground">Fecha:</span>
-                      <span className="font-semibold">
+                      <span className="font-semibold" suppressHydrationWarning>
                         {new Date(pedido.created_at).toLocaleDateString('es-CO', {
                           year: 'numeric',
                           month: 'long',
@@ -257,7 +258,7 @@ export default function ConfirmacionPage() {
 
                     <div className="flex justify-between items-center pt-2 border-t">
                       <span className="text-muted-foreground font-semibold">Total:</span>
-                      <span className="font-bold text-2xl text-primary">
+                      <span className="font-bold text-2xl text-primary" suppressHydrationWarning>
                         ${pedido.total.toLocaleString('es-CO')}
                       </span>
                     </div>
@@ -319,11 +320,11 @@ export default function ConfirmacionPage() {
                       <div className="space-y-1 text-sm">
                         <p className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          {pedido.correo_electronico}
+                          {SITE_CONFIG.contacto.email}
                         </p>
                         <p className="flex items-center gap-2">
                           <Phone className="w-4 h-4" />
-                          {pedido.telefono}
+                          {SITE_CONFIG.contacto.telefono}
                         </p>
                       </div>
                     </div>
