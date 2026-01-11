@@ -9,6 +9,7 @@ import { CheckCircle2, XCircle, Clock, AlertTriangle, Home, RotateCcw, Mail, Pho
 import Link from 'next/link';
 import type { Pedido } from '@/types/database';
 import { motion } from 'framer-motion';
+import { SITE_CONFIG } from '@/config/site';
 
 type EstadoPago = 'procesando' | 'aprobado' | 'rechazado' | 'pendiente' | 'error';
 
@@ -319,11 +320,11 @@ export default function ConfirmacionPage() {
                       <div className="space-y-1 text-sm">
                         <p className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
-                          contacto@elcampodedonramon.com
+                          {SITE_CONFIG.contacto.email}
                         </p>
                         <p className="flex items-center gap-2">
                           <Phone className="w-4 h-4" />
-                          +57 318 741 0586
+                          {SITE_CONFIG.contacto.telefono}
                         </p>
                       </div>
                     </div>
