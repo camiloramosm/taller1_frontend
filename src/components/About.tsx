@@ -40,8 +40,7 @@ export function About() {
               Más que un Café, una <span className="text-primary italic">Actitud ante la Vida</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Don Ramón Café nace de la resiliencia y la pasión. Como el legendario personaje, 
-              nuestro café es directo, sin pretensiones, pero con una profundidad y carácter 
+              Don Ramón Café nace de la resiliencia y la pasión. Nuestro café es directo, sin pretensiones, pero con una profundidad y carácter 
               que te sorprenderán. Seleccionamos granos que han sobrevivido a las condiciones 
               más duras para ofrecerte la taza más robusta.
             </p>
@@ -62,7 +61,7 @@ export function About() {
             <div className="grid grid-cols-3 gap-8 border-t border-border pt-10">
               <div>
                 <p className="text-3xl font-bold text-primary">15+</p>
-                <p className="text-sm text-muted-foreground uppercase tracking-wider">Años de Tostado</p>
+                <p className="text-sm text-muted-foreground uppercase tracking-wider">Años de experiencia en el campo</p>
               </div>
               <div>
                 <p className="text-3xl font-bold text-primary">24h</p>
