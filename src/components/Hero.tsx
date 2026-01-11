@@ -73,24 +73,6 @@ export function Hero() {
             transition={{ delay: 0.8, duration: 1 }}
             className="mt-16 flex items-center gap-8"
           >
-            <div className="flex -space-x-4">
-              {[1, 2, 3, 4].map((i) => (
-                <img
-                  key={i}
-                  src={`https://i.pravatar.cc/100?img=${i + 10}`}
-                  alt="User"
-                  className="w-12 h-12 rounded-full border-4 border-background object-cover"
-                />
-              ))}
-            </div>
-            <div>
-              <p className="font-bold text-foreground">+5,000 Clientes Felices</p>
-              <div className="flex text-accent">
-                {"★★★★★".split("").map((s, i) => (
-                  <span key={i}>{s}</span>
-                ))}
-              </div>
-            </div>
           </motion.div>
         </div>
       </div>
