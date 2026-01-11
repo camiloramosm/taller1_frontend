@@ -47,7 +47,7 @@ export default function Home() {
               {
                 icon: ShieldCheck,
                 title: "Calidad Premium",
-                desc: "Solo el 1% de los granos califica para Don Ramón.",
+                desc: "Solo el 40% de los granos califica para Don Ramón.",
               },
             ].map((feature, i) => (
               <div key={i} className="flex flex-col items-center text-center group">
@@ -67,7 +67,7 @@ export default function Home() {
       <Products />
       <About />
 
-      {/* Testimonials/Newsletter CTA */}
+    { /* {/* Testimonials/Newsletter CTA 
       <section id="suscripciones" className="py-24 bg-primary text-primary-foreground relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-[120px]" />
@@ -91,8 +91,8 @@ export default function Home() {
           </button>
         </div>
       </section>
-
-      <Footer />
+*/}
+     <Footer />
     </main>
   );
 }

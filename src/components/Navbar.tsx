@@ -28,7 +28,7 @@ export function Navbar() {
     { name: "Inicio", href: "#" },
     { name: "Productos", href: "#productos" },
     { name: "Nuestra Historia", href: "#historia" },
-    { name: "Suscripciones", href: "#suscripciones" },
+  //  { name: "Suscripciones", href: "#suscripciones" },
   ];
 
   return (
