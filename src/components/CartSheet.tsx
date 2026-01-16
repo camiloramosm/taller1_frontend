@@ -98,7 +98,8 @@ export function CartSheet() {
                             src={item.image}
                             alt={item.name}
                             fill
-                            className="object-cover transition-transform duration-700 group-hover:scale-110"
+                            className="object-contain transition-transform duration-700 group-hover:scale-110"
+                            sizes="112px"
                           />
                           <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
                         </div>
